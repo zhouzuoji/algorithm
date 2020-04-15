@@ -62,6 +62,24 @@ private:
     vector<T> m_items; 
 };
 
+template<class T>
+struct DLinkNode {
+    T data;
+    struct DLinkNode *prior, *next;  
+    void unlink() {
+        prior->next=next;
+        next->prior=prior;
+        prior=next=this;      
+    }  
+
+    void insert_after(struct DLinkNode& node) {
+        node.next->prior = this;
+        this->next=node.next;
+        node.next=this;
+        this->prior=&node;
+    }
+};
+
 namespace json {
     template<class T>
     inline void print(std::ostream& os, const T& val) { os << val; }
